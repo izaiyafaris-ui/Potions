@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#15111e">
+<title>Moonroot Apothecary</title>
+<style>
+:root{
+  --bg:#15111e;--panel:#211a2d;--panel2:#2b2238;--line:#493b59;
+  --text:#f8f2ff;--muted:#bcb0c9;--purple:#8c5bd1;--gold:#f2c75c;
+  --green:#83df99;--red:#ff8795;--paper:#f6e9c7;--ink:#3d3027;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;touch-action:none}
+body{padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
+button{font:inherit}
+#app{width:min(100%,720px);margin:auto;min-height:100vh;display:flex;flex-direction:column}
+header{height:62px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:21px;font-weight:850}.cash{background:#342a1c;border:1px solid #66532b;color:var(--gold);border-radius:99px;padding:8px 13px;font-weight:850}
+.clock{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:10px 13px;margin-bottom:9px}
+.clocktop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+#time{font-size:18px;font-weight:850}#phase{font-size:12px;color:var(--muted);text-align:right}
+.progress{height:6px;background:#120e18;border-radius:99px;margin-top:8px;overflow:hidden}.fill{height:100%;width:4%;background:var(--purple);transition:width .25s}
+#game{display:flex;flex-direction:column;gap:9px;flex:1}
+.section{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:11px}
+.sectiontitle{font-size:12px;font-weight:850;color:#d8cce2;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.customerBox{min-height:115px;display:flex;gap:11px;align-items:center}
+.avatar{width:66px;height:66px;flex:0 0 66px;border-radius:50%;background:#d99b70;border:4px solid #5a3c37;position:relative}
+.avatar:before{content:"";position:absolute;left:5px;top:-6px;width:52px;height:27px;border-radius:50%;background:#4c2b32}
+.speech{background:#f7f1fb;color:#2d2534;border-radius:14px;padding:10px 12px;font-size:13px;line-height:1.35;flex:1}
+.speech b{display:block;margin-bottom:3px}
+.customerBox.waiting .speech{color:var(--muted);background:#2b2435}
+.workspace{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.zone{min-height:150px;background:#19151f;border:2px dashed #51445f;border-radius:15px;padding:10px;position:relative}
+.zone.active{border-color:#a276dc;background:#21192d}
+.zone.done{border-style:solid;border-color:#65746a}
+.zone h3{font-size:13px;margin:0 0 5px}.zone p{font-size:11px;color:var(--muted);margin:0;line-height:1.3}
+.dropmsg{position:absolute;left:10px;right:10px;bottom:10px;text-align:center;font-size:11px;color:#8f819c}
+.boardCard{background:#9b6b44;border:5px solid #5a3a29;border-radius:8px;padding:8px;color:#f6d7b3;min-height:100px;font-size:11px;line-height:1.35}
+.boardCard b{font-size:13px}
+.object{position:absolute;z-index:20;user-select:none;touch-action:none;filter:drop-shadow(0 5px 7px rgba(0,0,0,.3))}
+.order{width:118px;min-height:78px;background:var(--paper);color:var(--ink);border:2px solid #d4bd8e;border-radius:10px;padding:9px;font-size:12px;font-weight:700}
+.order small{display:block;font-weight:500;margin-top:4px}
+.potion{width:74px;height:84px;border:3px solid #cdb0ef;border-radius:24px 24px 18px 18px;background:linear-gradient(#aa7add,#664094);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:28px}
+.potion:before{content:"";position:absolute;top:-13px;width:34px;height:18px;border-radius:5px;background:#70482f;border:2px solid #4d3023}
+.bill{width:94px;background:#fff9e8;color:#3d3027;border:2px solid #d6c38e;border-radius:9px;padding:9px;font-size:12px;font-weight:850}
+.delivery{min-height:108px;display:flex;align-items:center;justify-content:center;gap:8px}
+.deliveryText{text-align:center;color:#85768e;font-size:11px;line-height:1.35}
+.customerTarget{height:112px;border:2px dashed #a276dc;border-radius:15px;background:#20182b;display:flex;align-items:center;justify-content:center;text-align:center;color:#bca9cc;font-size:11px;padding:10px}
+.customerTarget.ready{border-color:var(--gold);color:#ead28b}
+.payment{min-height:145px}
+.tray{height:112px;border:2px dashed #5b5363;border-radius:15px;background:#17131d;position:relative;overflow:hidden}
+.tray.ready{border-color:#8a6fba}
+.coin,.item{position:absolute;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;font-weight:900;border:3px solid rgba(255,255,255,.18);z-index:25}
+.coin10{background:#b79b4f}.coin5{background:#92939b}.item{background:#537c5a;border-radius:12px;width:76px}
+.message{min-height:27px;text-align:center;font-size:13px;font-weight:750;padding:2px}
+.good{color:var(--green)}.bad{color:var(--red)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:0;border-radius:14px;padding:13px 8px;background:#342a40;color:var(--text);font-weight:850}
+.btn.primary{background:var(--purple)}.btn:disabled{opacity:.35}
+.help{font-size:10px;color:#8f8399;text-align:center;padding:1px 5px 8px}
+.modal{position:fixed;inset:0;background:rgba(8,5,12,.78);z-index:100;display:flex;align-items:flex-end;padding:14px}
+.sheet{width:min(700px,100%);margin:auto;background:#211a2d;border:1px solid #514361;border-radius:21px;padding:18px}
+.sheet h2{margin:0 0 7px}.sheet p{font-size:14px;color:#c8bdd1;line-height:1.45}.sheet button{width:100%;background:var(--purple);color:white;border:0;border-radius:14px;padding:14px;font-weight:900}
+.hidden{display:none!important}
+@media(max-width:390px){.workspace{grid-template-columns:1fr}.zone{min-height:125px}.customerBox{min-height:105px}.avatar{width:56px;height:56px;flex-basis:56px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="logo">🧪 Moonroot Apothecary</div><div class="cash">💰 <span id="money">40</span>g</div></header>
+<div class="clock"><div class="clocktop"><span id="time">7:15 AM</span><span id="phase">Customer arriving</span></div><div class="progress"><div class="fill" id="fill"></div></div></div>
+
+<main id="game">
+  <section class="section">
+    <div class="sectiontitle">Customer</div>
+    <div class="customerBox" id="customerBox">
+      <div class="avatar"></div>
+      <div class="speech" id="speech"><b>Emily</b>Waiting at the counter...</div>
+    </div>
+  </section>
+
+  <section class="section" id="orderSection">
+    <div class="sectiontitle">1 • Receive & file the order</div>
+    <div class="workspace">
+      <div class="zone active" id="counterZone"><h3>Your Counter</h3><p>The customer leaves the order here.</p><div class="dropmsg" id="counterMsg">Drag the order → Delivery Board</div></div>
+      <div class="zone" id="boardZone"><h3>Delivery Board</h3><div class="boardCard hidden" id="boardCard"><b>ORDER #12 • EMILY</b><br>Return: 8:00 PM<br><br>“I can’t sleep. My head just won’t quiet down.”</div><div class="dropmsg" id="boardMsg">Drop order here</div></div>
+    </div>
+  </section>
+
+  <section class="section hidden" id="deliverySection">
+    <div class="sectiontitle">2 • Deliver when the customer returns</div>
+    <div class="workspace">
+      <div class="zone active" id="kitZone"><h3>Your Items</h3><p>Drag each item to Emily in this order:</p><p><b>① Potion → ② Order → ③ Bill</b></p><div class="delivery" id="kit"></div></div>
+      <div class="zone"><h3>Customer</h3><div class="customerTarget ready" id="customerTarget">Drop the correct item here</div></div>
+    </div>
+  </section>
+
+  <section class="section hidden" id="paymentSection">
+    <div class="sectiontitle">3 • Sort the payment</div>
+    <p style="font-size:11px;color:var(--muted);margin:0 0 7px">Drag every payment piece into the tray. Coins count toward your gold. Items are kept separately.</p>
+    <div class="tray ready" id="tray"></div>
+  </section>
+
+  <div class="message" id="message"></div>
+  <div class="actions"><button class="btn primary" id="advance">Advance Time</button><button class="btn" id="reset">Reset Test</button></div>
+  <div class="help">Everything important is a large touch-and-drag target. Follow the numbered steps.</div>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="sheet">
+<h2>Welcome to the shop 🧪</h2>
+<p>This version is organized into clear steps. First file the customer’s order. Then advance time until she returns. Deliver <b>potion → order → bill</b>. Finally sort the payment.</p>
+<button id="start">Start Selling</button>
+</div></div>
+
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+let phase=0,money=40,time=435,drag=null,off={x:0,y:0},sorted=0,total=0;
+
+function clock(){
+  let h=Math.floor(time/60),m=time%60,ap=h>=720?'PM':'AM',hh=((h+11)%12)+1;
+  $('time').textContent=`${hh}:${String(m).padStart(2,'0')} ${ap}`;
+  $('fill').style.width=Math.max(4,Math.min(100,((time-435)/765)*100))+'%';
+}
+function msg(t,c=''){ $('message').textContent=t;$('message').className='message '+c; }
+function point(e){let r=$('game').getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function dragify(el){
+ el.addEventListener('pointerdown',e=>{
+   if(el.dataset.locked==='1')return;
+   drag=el;el.setPointerCapture?.(e.pointerId);
+   let p=point(e),r=el.getBoundingClientRect(),g=$('game').getBoundingClientRect();
+   off.x=p.x-(r.left-g.left);off.y=p.y-(r.top-g.top);el.style.zIndex=80;
+ });
+}
+$('game').addEventListener('pointermove',e=>{
+ if(!drag)return;let p=point(e);
+ drag.style.left=Math.max(2,p.x-off.x)+'px';drag.style.top=Math.max(2,p.y-off.y)+'px';
+});
+$('game').addEventListener('pointerup',()=>{if(drag){let x=drag;drag=null;drop(x)}});
+function hit(a,b){
+ let A=a.getBoundingClientRect(),B=b.getBoundingClientRect();
+ return !(A.right<B.left||A.left>B.right||A.bottom<B.top||A.top>B.bottom);
+}
+function spawn(cls,text,parent){
+ let e=document.createElement('div');e.className='object '+cls;e.innerHTML=text;$(parent).appendChild(e);dragify(e);return e;
+}
+function start(){
+ $('modal').classList.add('hidden');phase=1;
+ $('speech').innerHTML='<b>Emily</b>“I’ve been having terrible trouble sleeping. My head just won’t quiet down. I’ll come back at 8:00 PM.”';
+ let z=$('counterZone'),o=spawn('order','📜 ORDER #12<small>Emily</small>','counterZone');
+ o.style.left='50%';o.style.top='62px';o.style.transform='translateX(-50%)';o.dataset.kind='order';
+ msg('① Drag Emily’s order to the Delivery Board.');
+ $('phase').textContent='Order waiting on counter';
+}
+function drop(el){
+ if(phase===1&&el.dataset.kind==='order'&&hit(el,$('boardZone'))){
+   el.remove();phase=2;$('boardCard').classList.remove('hidden');$('boardMsg').classList.add('hidden');
+   $('counterMsg').textContent='Order filed ✓';$('counterZone').classList.remove('active');$('counterZone').classList.add('done');
+   $('boardZone').classList.remove('active');$('boardZone').classList.add('done');
+   msg('Order filed. Now prepare Dreamer’s Rest before 8:00 PM.','good');
+   $('phase').textContent='Order filed • Dreamer’s Rest';
+   return;
+ }
+ if(phase>=3&&phase<=5&&el.dataset.kind&&hit(el,$('customerTarget'))){
+   let needed=['potion','order','bill'][phase-3];
+   if(el.dataset.kind!==needed){msg('Wrong item. Follow the order: Potion → Order → Bill.','bad');return}
+   el.dataset.locked='1';el.style.left='auto';el.style.top='auto';el.style.position='relative';el.style.transform='none';
+   $('customerTarget').appendChild(el);
+   el.style.margin='3px';el.style.width=needed==='potion'?'48px':'72px';el.style.height=needed==='potion'?'55px':'42px';
+   phase++;
+   if(phase===6){msg('Perfect. Emily pays you!','good');setTimeout(payment,300)}
+   else msg('Correct! Keep going.','good');
+   return;
+ }
+ if(phase===6||phase===7){
+   if(el.dataset.pay&&hit(el,$('tray'))){let v=Number(el.dataset.value||0);total+=v;sorted++;el.dataset.locked='1';el.style.position='relative';el.style.left='auto';el.style.top='auto';el.style.margin='3px';$('tray').appendChild(el);
+     if(sorted===4){money+=total;$('money').textContent=money;phase=8;$('phase').textContent='Sale complete';msg(`Payment sorted. You earned ${total}g. Silverleaf was kept as an item.`,'good');$('advance').disabled=true;}
+     else msg(`${4-sorted} payment pieces left.`, 'good');
+   }
+ }
+}
+function kit(){
+ let p=spawn('potion','🧪','kit');p.dataset.kind='potion';p.style.position='relative';p.style.left='8px';p.style.top='34px';
+ let o=spawn('order','📜<small>ORDER #12</small>','kit');o.dataset.kind='order';o.style.position='relative';o.style.left='18px';o.style.top='25px';
+ let b=spawn('bill','BILL<br>25g','kit');b.dataset.kind='bill';b.style.position='relative';b.style.left='28px';b.style.top='28px';
+}
+function payment(){
+ phase=6;$('paymentSection').classList.remove('hidden');$('deliverySection').classList.add('hidden');
+ $('phase').textContent='Sort payment';$('customerBox').classList.add('waiting');
+ $('speech').innerHTML='<b>Emily</b>“Thank you! Here’s your payment.”';
+ let tray=$('tray');
+ [['coin10','10g',10],['coin10','10g',10],['coin5','5g',5],['item','🌿<br>Silverleaf',0]].forEach((a,i)=>{
+   let e=spawn(a[0],a[1],'tray');e.dataset.pay='1';e.dataset.value=a[2];e.style.position='absolute';e.style.left=(8+i*80)+'px';e.style.top='25px';
+ });
+ sorted=0;total=0;msg('③ Drag all four payment pieces into the tray.','good');
+}
+function advance(){
+ if(phase===1){time=1170;$('phase').textContent='7:30 PM • brewing time';msg('Time advanced. Finish the potion before Emily returns.');}
+ else if(phase===2){time=1200;phase=3;$('deliverySection').classList.remove('hidden');$('orderSection').classList.add('hidden');$('customerBox').classList.remove('waiting');$('speech').innerHTML='<b>Emily</b>“Hi! I hope you made something to help.”';$('phase').textContent='Customer returned';kit();msg('② Emily is back. Deliver the Potion first.');}
+ else if(phase===8)msg('The sale is already complete.','good');
+ else msg('Follow the numbered step on screen.');
+ clock();
+}
+function reset(){location.reload()}
+$('start').onclick=start;$('advance').onclick=advance;$('reset').onclick=reset;clock();
+})();
+</script>
+</body>
+</html>
