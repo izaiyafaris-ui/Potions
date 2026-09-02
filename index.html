@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a120d">
+<title>Moonroot Apothecary</title>
+<style>
+:root{
+ --wood:#6b4028;--wood2:#4b2d1e;--wood3:#8a5736;--dark:#21150f;--paper:#f3e5c1;
+ --ink:#39281d;--green:#779c65;--gold:#e5b94f;--purple:#8d61c4;--cream:#ead6ad;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#120d09;color:#f7eddc;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;touch-action:none}
+body{padding:env(safe-area-inset-top) 10px env(safe-area-inset-bottom)}
+#app{height:100%;width:min(100%,620px);margin:auto;display:flex;flex-direction:column}
+header{height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:18px;font-weight:900;letter-spacing:.2px}.brand small{display:block;color:#a99178;font-size:8px;letter-spacing:1.3px;text-transform:uppercase;margin-left:28px;margin-top:-2px}
+.money{background:#342518;border:1px solid #75552f;border-radius:20px;padding:7px 11px;color:#f3c85e;font-weight:900}
+.hud{height:51px;flex:0 0 51px;background:#21160f;border:1px solid #4e3627;border-radius:13px;padding:7px 11px;margin-bottom:7px}
+.hudtop{display:flex;justify-content:space-between;align-items:center}.time{font-weight:900;font-size:16px}.phase{font-size:10px;color:#bba58d}.bar{height:4px;background:#110b07;margin-top:6px;border-radius:99px}.fill{height:100%;width:4%;background:#b07bdc;border-radius:99px}
+#screen{flex:1;min-height:0}
+.view{height:100%;display:flex;flex-direction:column;gap:7px}
+.kicker{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#b69a7d;font-weight:900}
+.shop{
+ position:relative;flex:1;min-height:0;overflow:hidden;border:4px solid #3d2518;border-radius:15px;
+ background:
+ radial-gradient(circle at 18% 20%,#b8784420 0 3px,transparent 4px),
+ radial-gradient(circle at 74% 13%,#d89b5b18 0 2px,transparent 3px),
+ linear-gradient(90deg,#684029 0 12%,#7c4b2d 12% 13%,#5b351f 13% 25%,#74472a 25% 27%,#5f391f 27% 45%,#75482b 45% 47%,#5b351f 47% 67%,#75472a 67% 69%,#5d371f 69% 86%,#774a2c 86% 88%,#5b351f 88%);
+ box-shadow:inset 0 0 50px #180b05,0 10px 25px #0008;
+}
+.shop:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 48px,#3d241633 49px 51px);pointer-events:none}
+.roof{height:50px;background:linear-gradient(#2f2119,#1d140e);border-bottom:5px solid #40291d;position:relative}
+.roofSign{position:absolute;left:50%;top:9px;transform:translateX(-50%);padding:5px 15px;background:#d1aa69;color:#3b281b;border:3px solid #563923;border-radius:5px;font:900 10px Georgia,serif;letter-spacing:1px;box-shadow:0 3px 6px #0006}
+.shelf{position:absolute;left:8%;right:8%;top:63px;height:66px;border-bottom:8px solid #45291b}
+.shelf:before{content:"";position:absolute;left:0;right:0;bottom:10px;height:3px;background:#bd7950}
+.bottle{position:absolute;bottom:15px;width:20px;height:31px;border-radius:5px 5px 8px 8px;background:#9d6dca;border:2px solid #d3b0e8;box-shadow:inset 3px 0 #fff2}.bottle:before{content:"";position:absolute;top:-8px;left:5px;width:7px;height:9px;background:#754a2e;border-radius:2px}
+.window{position:absolute;left:6%;right:6%;top:145px;height:43%;background:#19110d;border:10px solid #3c2619;border-radius:8px;box-shadow:inset 0 0 0 3px #93613b,inset 0 0 35px #000;overflow:hidden}
+.windowTop{height:14px;background:#2b1c14;border-bottom:3px solid #70462d}
+.night{position:absolute;inset:17px 0 0;background:linear-gradient(#1d3150 0,#263e57 50%,#17222b 100%)}
+.moon{position:absolute;right:16%;top:12%;width:30px;height:30px;border-radius:50%;background:#ead9a0;box-shadow:0 0 18px #f0dca055}
+.tree{position:absolute;bottom:-2px;width:55px;height:80px;background:#17201b;border-radius:50% 50% 5px 5px}.tree:after{content:"";position:absolute;bottom:0;left:23px;width:9px;height:44px;background:#241a13}.t1{left:5%}.t2{right:3%;height:100px}.t3{left:38%;height:62px}
+.customerOutside{position:absolute;z-index:5;left:50%;bottom:-5px;transform:translateX(-50%);width:115px;text-align:center}
+.body{width:78px;height:72px;margin:auto;background:#667b99;border:4px solid #2d3a4e;border-radius:35px 35px 13px 13px;position:relative}
+.head{width:54px;height:54px;margin:auto;margin-bottom:-18px;border-radius:50%;background:#d79a6c;border:4px solid #59383a;position:relative;z-index:2}.head:before{content:"";position:absolute;left:5px;top:-7px;width:37px;height:23px;background:#492c31;border-radius:50%}
+.windowBubble{position:absolute;z-index:8;left:7%;right:7%;top:14px;background:#f7edd9;color:#35271d;border-radius:10px;padding:7px 9px;font-size:10px;line-height:1.25;text-align:left;box-shadow:0 5px 15px #0008}.windowBubble b{display:block;margin-bottom:2px}
+.counter{position:absolute;z-index:9;left:-2%;right:-2%;bottom:0;height:25%;background:linear-gradient(#8a5635,#623b27);border-top:8px solid #3d2518;box-shadow:0 -5px 15px #0007}
+.counterTop{position:absolute;top:-11px;left:0;right:0;height:12px;background:#a36a43;border-top:2px solid #c08a5c;border-bottom:3px solid #43291b}
+.counterLabel{text-align:center;color:#e1bd91;font-size:9px;letter-spacing:1px;margin-top:20px;text-transform:uppercase;font-weight:900}
+.workspace{
+ flex:0 0 30%;display:grid;grid-template-columns:1fr 1fr;gap:7px;
+}
+.station{position:relative;background:#21150f;border:1px solid #583a28;border-radius:12px;padding:9px;overflow:hidden}
+.station h3{margin:0 0 3px;font-size:11px;color:#ead5b4}.station p{margin:0;color:#a99178;font-size:9px;line-height:1.3}
+.board{margin-top:6px;height:calc(100% - 30px);background:#9a6a42;border:5px solid #4d2f20;border-radius:5px;padding:7px;color:#f4d6ae;font-size:9px;line-height:1.35;box-shadow:inset 0 0 0 2px #c28a59}.board b{font-size:11px}
+.paper{position:absolute;z-index:30;width:108px;height:73px;background:var(--paper);color:var(--ink);border:2px solid #c9ad75;border-radius:8px;padding:8px;box-shadow:0 8px 14px #0008;font-size:11px;font-weight:900;touch-action:none;user-select:none}
+.paper small{display:block;font-size:9px;font-weight:600;margin-top:3px}.start{left:50%;top:55%;transform:translate(-50%,-50%)}
+.instruction{background:#2b1d14;border:1px solid #62432c;border-radius:10px;padding:8px;font-size:11px;line-height:1.3;color:#cdb99e}.instruction strong{color:#f6e5c8}
+.choiceGrid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.choice{border:1px solid #593f2b;background:linear-gradient(#2b1d15,#21150f);border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;color:#f7ead8;text-align:left}.choice.selected{border:2px solid var(--gold);background:#362719}.choice:active{transform:scale(.98)}
+.icon{width:40px;height:45px;flex:0 0 40px;border-radius:14px 14px 10px 10px;background:linear-gradient(#ae7dde,#674096);border:2px solid #d0b0ed;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;font-size:18px;position:relative}.icon:before{content:"";position:absolute;top:-7px;width:20px;height:10px;background:#70472d;border-radius:3px}
+.choice b{display:block;font-size:10px}.choice span{display:block;color:#a99582;font-size:8px;line-height:1.2;margin-top:2px}
+.info{background:#21150f;border:1px solid #583b28;border-radius:11px;padding:8px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #ffffff0b;padding:4px 0;font-size:9px;color:#aa927a}.row:last-child{border:0}.row b{color:#eee0cb}
+.delivery{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex:1;min-height:0}
+.items,.recipient{position:relative;min-height:0;border-radius:12px;padding:8px}.items{background:#21150f;border:1px dashed #69482f}.recipient{background:#2a1c14;border:2px solid #7b5738}
+.mini{display:flex;align-items:center;gap:6px;font-size:10px;margin-bottom:6px}.mini .head{width:36px;height:36px;margin:0}.mini .body{display:none}
+.target{height:calc(100% - 45px);border:2px dashed #b88b66;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;color:#bda58b;font-size:10px;padding:8px}
+.draggable{position:absolute;z-index:30;touch-action:none;user-select:none;box-shadow:0 8px 15px #0008}
+.potion{width:64px;height:72px;border-radius:22px 22px 16px 16px;background:linear-gradient(#ad7dde,#684097);border:3px solid #d0b1ef;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-size:24px}.potion:before{content:"";position:absolute;top:-11px;width:29px;height:16px;background:#70472d;border:2px solid #4c3024;border-radius:4px}
+.deliveryPaper{width:96px;min-height:63px;background:var(--paper);color:var(--ink);border:2px solid #c9ad75;border-radius:8px;padding:7px;font-size:10px;font-weight:900}
+.bill{width:83px;background:#fff9e8;color:var(--ink);border:2px solid #d5c28c;border-radius:8px;padding:7px;font-size:10px;font-weight:900}
+.tray{position:relative;flex:1;min-height:0;border:2px dashed #8c6948;border-radius:14px;background:radial-gradient(circle,#302015,#1b120d);overflow:hidden}.tray:before{content:"PAYMENT TRAY";position:absolute;top:7px;left:0;right:0;text-align:center;color:#806b58;font-size:9px;letter-spacing:1px;font-weight:900}
+.coin,.herb{position:absolute;z-index:30;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;touch-action:none;user-select:none;box-shadow:0 7px 14px #0009}.coin{width:56px;height:56px;border-radius:50%;border:3px solid #fff3;font-size:10px}.coin10{background:radial-gradient(circle at 35% 28%,#ddc477,#96792f)}.coin5{background:radial-gradient(circle at 35% 28%,#d5d5d8,#777881)}.herb{width:73px;height:50px;border-radius:11px;background:linear-gradient(#6e9d73,#3d6545);border:2px solid #8db391;font-size:9px}
+.message{min-height:19px;text-align:center;font-size:11px;font-weight:850}.good{color:#82dc92}.bad{color:#ff8794}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.btn{border:0;border-radius:12px;padding:11px 7px;background:#342319;color:#f8ebd8;font-weight:900}.primary{background:linear-gradient(#9a68d7,#7147a7)}.btn:disabled{opacity:.35}
+.complete{height:100%;display:flex;align-items:center;justify-content:center}.completeBox{width:100%;background:#21150f;border:1px solid #5b3e2a;border-radius:18px;padding:22px;text-align:center}.big{font-size:42px}.completeBox h2{margin:5px}.completeBox p{color:#bba38a;font-size:12px;line-height:1.4}
+.modal{position:fixed;inset:0;background:#080503dd;z-index:100;display:flex;align-items:flex-end;padding:12px}.sheet{width:min(600px,100%);margin:auto;background:linear-gradient(#302116,#21150f);border:1px solid #67462f;border-radius:18px;padding:17px;box-shadow:0 20px 60px #0009}.sheet h2{margin:0 0 7px;font-size:21px}.sheet p{color:#c6ae94;font-size:13px;line-height:1.45}.sheet button{width:100%;border:0;border-radius:12px;padding:13px;background:#8d5dca;color:#fff;font-weight:900}
+.hidden{display:none!important}
+@media(max-width:390px){.brand{font-size:16px}.hud{margin-bottom:5px}.shop{border-width:3px}.window{top:132px;height:43%}.shelf{top:55px}.workspace{flex-basis:28%}.station{padding:7px}.choice{padding:6px}.choice span{font-size:7px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="brand">🧪 Moonroot Apothecary<small>handcrafted potions • since 1847</small></div><div class="money">💰 <span id="money">40</span>g</div></header>
+<div class="hud"><div class="hudtop"><span class="time" id="time">7:15 AM</span><span class="phase" id="phase">Shop opening</span></div><div class="bar"><div class="fill" id="fill"></div></div></div>
+<div id="screen"></div>
+</div>
+<div class="modal" id="modal"><div class="sheet"><h2>🌙 Open the shutters</h2><p>The morning shop is ready. A customer is waiting outside the service window. Listen to their problem, file the order, prepare the right potion, and serve them through the window.</p><button id="start">Open the Shop</button></div></div>
+
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+let phase=0,time=435,money=40,selected=null,drag=null,dx=0,dy=0,sorted=0,total=0;
+
+function clock(){let h=Math.floor(time/60),m=time%60,ap=h>=720?'PM':'AM',hh=((h+11)%12)+1;$('time').textContent=`${hh}:${String(m).padStart(2,'0')} ${ap}`;$('fill').style.width=Math.max(4,Math.min(100,((time-435)/765)*100))+'%'}
+function msg(t,c=''){let e=$('message');if(e){e.textContent=t;e.className='message '+c}}
+function customerWindow(text){
+ return `<div class="shop">
+   <div class="roof"><div class="roofSign">MOONROOT APOTHECARY</div></div>
+   <div class="shelf"><i class="bottle" style="left:8%"></i><i class="bottle" style="left:22%;background:#6fae8a"></i><i class="bottle" style="left:37%;background:#d68a6e"></i><i class="bottle" style="left:54%;background:#9b70ca"></i><i class="bottle" style="left:70%;background:#d8b85d"></i><i class="bottle" style="left:84%;background:#6da2bf"></i></div>
+   <div class="window"><div class="windowTop"></div><div class="night"><div class="moon"></div><div class="tree t1"></div><div class="tree t2"></div><div class="tree t3"></div></div>
+    <div class="windowBubble"><b>Emily</b>${text}</div>
+    <div class="customerOutside"><div class="head"></div><div class="body"></div></div>
+   </div>
+   <div class="counter"><div class="counterTop"></div><div class="counterLabel">service window • orders & deliveries</div></div>
+ </div>`
+}
+function makeDrag(el){
+ el.addEventListener('pointerdown',e=>{
+  if(el.dataset.locked==='1')return;e.preventDefault();drag=el;
+  const r=el.getBoundingClientRect();dx=e.clientX-r.left;dy=e.clientY-r.top;
+  el.style.position='fixed';el.style.left=r.left+'px';el.style.top=r.top+'px';el.style.transform='none';el.style.zIndex=500;
+  try{el.setPointerCapture(e.pointerId)}catch{}
+ })
+}
+document.addEventListener('pointermove',e=>{if(drag){drag.style.left=(e.clientX-dx)+'px';drag.style.top=(e.clientY-dy)+'px'}})
+document.addEventListener('pointerup',()=>{if(drag){let e=drag;drag=null;drop(e)}})
+function hit(a,b){let A=a.getBoundingClientRect(),B=b.getBoundingClientRect();return !(A.right<B.left||A.left>B.right||A.bottom<B.top||A.top>B.bottom)}
+function addDrag(parent,cls,html){let e=document.createElement('div');e.className=cls;e.innerHTML=html;$(parent).appendChild(e);makeDrag(e);return e}
+function shell(content){$('screen').innerHTML=`<div class="view">${content}</div>`}
+function buttons(){ $('reset').onclick=reset }
+
+function renderOrder(){
+ phase=1;$('phase').textContent='Step 1 • File the order';
+ shell(`
+  <div class="kicker">Step 1 of 4 • A customer at the window</div>
+  ${customerWindow(`“I’ve been having terrible trouble sleeping. My head just won’t quiet down. I’ll come back at <b>8:00 PM</b>.”`)}
+  <div class="instruction"><strong>📜 File Emily’s order.</strong> Drag the paper from the service counter to the Delivery Board below.</div>
+  <div class="workspace">
+   <div class="station" id="counter"><h3>Counter</h3><p>Customer's order</p></div>
+   <div class="station" id="board"><h3>Delivery Board</h3><div class="centerhint">Drop order here</div></div>
+  </div>
+  <div class="message" id="message"></div>
+  <div class="actions"><button class="btn" id="reset">Reset</button><button class="btn primary" id="advance" disabled>Continue</button></div>`);
+ let o=addDrag('counter','paper start','📜 ORDER #12<small>Emily • 8:00 PM</small>');o.dataset.kind='order';
+ buttons();$('advance').onclick=renderChoice;msg('Drag the order to the Delivery Board.')
+}
+function renderChoice(){
+ phase=2;$('phase').textContent='Step 2 • Read & prepare';
+ shell(`
+  <div class="kicker">Step 2 of 4 • Solve the customer’s problem</div>
+  ${customerWindow(`“I really hope you can help. I haven’t slept properly in days.”`)}
+  <div class="info"><div class="row"><span>Customer</span><b>Emily</b></div><div class="row"><span>Return</span><b>8:00 PM</b></div><div class="row"><span>Problem</span><b>Can't sleep • racing thoughts</b></div></div>
+  <div class="instruction"><strong>🧠 Choose the remedy.</strong> The customer described a problem, not a potion. Pick the potion that best matches her symptoms.</div>
+  <div class="choiceGrid">
+   <button class="choice" data-p="dream"><div class="icon">🧪</div><div><b>Dreamer’s Rest</b><span>Calms racing thoughts and aids sleep.</span></div></button>
+   <button class="choice" data-p="sun"><div class="icon" style="background:linear-gradient(#e0b858,#9d682b)">☀️</div><div><b>Sunwake Elixir</b><span>Restores alertness and energy.</span></div></button>
+   <button class="choice" data-p="mender"><div class="icon" style="background:linear-gradient(#dc7694,#913e5d)">💗</div><div><b>Mender’s Draught</b><span>Soothes aches and bruises.</span></div></button>
+   <button class="choice" data-p="iron"><div class="icon" style="background:linear-gradient(#79a76b,#416047)">🌿</div><div><b>Ironbark Tonic</b><span>Strengthens the body against weakness.</span></div></button>
+  </div>
+  <div class="message" id="message"></div>
+  <div class="actions"><button class="btn" id="reset">Reset</button><button class="btn primary" id="choose" disabled>Prepare Potion</button></div>`);
+ buttons();
+ document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{document.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selected=b.dataset.p;msg(selected==='dream'?'That matches Emily’s symptoms. Dreamer’s Rest is ready to brew.':'That remedy doesn’t match the problem. Think about what Emily actually described.');$('choose').disabled=false});
+ $('choose').onclick=()=>{if(selected==='dream')renderReady();else msg('Choose the potion that treats sleeplessness and racing thoughts.','bad')}
+}
+function renderReady(){
+ phase=2;$('phase').textContent='Step 2 • Ready for 8:00 PM';
+ shell(`
+  <div class="kicker">Order #12 • Potion prepared</div>
+  ${customerWindow(`“I’ll be back at <b>8:00 PM</b>. Thank you.”`)}
+  <div class="instruction"><strong>🧪 Dreamer’s Rest is prepared.</strong> The customer is away for now. Advance the clock until she returns.</div>
+  <div class="info" style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center"><div><div style="font-size:74px">🧪</div><b>Dreamer’s Rest</b><br><span style="font-size:10px;color:#aa927a">prepared and waiting on the counter</span></div></div>
+  <div class="message good" id="message">Everything is ready. Emily returns at 8:00 PM.</div>
+  <div class="actions"><button class="btn" id="reset">Reset</button><button class="btn primary" id="advance">Advance to 8:00 PM</button></div>`);
+ buttons();$('advance').onclick=()=>{time=1200;clock();renderDelivery()}
+}
+function renderDelivery(){
+ phase=3;$('phase').textContent='Step 3 • Serve through window';
+ shell(`
+  <div class="kicker">Step 3 of 4 • Emily has returned</div>
+  ${customerWindow(`“Hi! I hope you made something to help.”`)}
+  <div class="instruction"><strong>📦 Serve her through the window.</strong> Deliver in this exact order: <b>① Potion → ② Order → ③ Bill</b></div>
+  <div class="delivery">
+   <div class="items" id="items"><h3>Your Counter</h3><p>Drag each item to Emily.</p></div>
+   <div class="recipient"><div class="mini"><div class="head"></div><b>Emily at the window</b></div><div class="target" id="target">Drop the next item here</div></div>
+  </div>
+  <div class="message" id="message"></div>
+  <div class="actions"><button class="btn" id="reset">Reset</button><button class="btn primary" id="advance" disabled>Continue</button></div>`);
+ buttons();
+ let p=addDrag('items','draggable potion','🧪');p.dataset.kind='potion';p.style.left='15%';p.style.top='50%';
+ let o=addDrag('items','draggable deliveryPaper','📜<br>ORDER #12');o.dataset.kind='order';o.style.left='49%';o.style.top='49%';
+ let b=addDrag('items','draggable bill','BILL<br>25g');b.dataset.kind='bill';b.style.left='28%';b.style.top='74%';
+ msg('① Drag the potion through the window to Emily.')
+}
+function renderPayment(){
+ phase=4;$('phase').textContent='Step 4 • Sort payment';
+ shell(`
+  <div class="kicker">Step 4 of 4 • Emily pays at the window</div>
+  ${customerWindow(`“Thank you! Here’s your payment. I hope the Silverleaf helps too.”`)}
+  <div class="instruction"><strong>🪙 Sort the payment.</strong> Emily left four pieces on the counter. Put every piece into the tray. Coins become gold; Silverleaf becomes an item.</div>
+  <div class="tray" id="tray"></div>
+  <div class="info" style="display:flex;justify-content:space-around"><div style="text-align:center"><b id="sortCount">0 / 4</b><br><span style="font-size:8px;color:#9e8973">pieces sorted</span></div><div style="text-align:center"><b id="sortGold">0g</b><br><span style="font-size:8px;color:#9e8973">gold collected</span></div></div>
+  <div class="message" id="message"></div>
+  <div class="actions"><button class="btn" id="reset">Reset</button><button class="btn primary" id="finish" disabled>Finish Sale</button></div>`);
+ buttons();
+ [['coin coin10','10g',10],['coin coin10','10g',10],['coin coin5','5g',5],['herb','🌿<br>Silverleaf',0]].forEach((a,i)=>{let e=addDrag('tray','draggable '+a[0],a[1]);e.dataset.pay=1;e.dataset.value=a[2];e.style.position='absolute';e.style.left=(7+i*23)+'%';e.style.top='47%'});
+ msg('Drag all four payment pieces into the tray.')
+}
+function renderComplete(){
+ $('phase').textContent='Sale complete';
+ shell(`<div class="complete"><div class="completeBox"><div class="big">🌙✨</div><h2>Sale Complete</h2><p>Emily left through the service window with the right potion, her order, and her bill.</p><div class="info"><div class="row"><span>Gold earned</span><b>+25g</b></div><div class="row"><span>Item received</span><b>🌿 Silverleaf ×1</b></div></div><p>The shutters are still open. Another customer could arrive any time.</p><button class="btn primary" id="reset" style="width:100%">Run the Sale Again</button></div></div>`);$('reset').onclick=reset
+}
+function drop(el){
+ if(phase===1&&el.dataset.kind==='order'&&hit(el,$('board'))){
+  el.remove();$('board').innerHTML='<h3>Delivery Board</h3><div class="board"><span class="pin"></span><b>ORDER #12 • EMILY</b><br>Return: 8:00 PM<br><br>“I can’t sleep. My head just won’t quiet down.”</div>';msg('Order filed ✓ Now solve Emily’s problem.','good');$('advance').disabled=false;return
+ }
+ if(phase===3&&el.dataset.kind&&hit(el,$('target'))){
+  let needed=['potion','order','bill'][document.querySelectorAll('.delivered').length];
+  if(el.dataset.kind!==needed){msg('Not yet. Deliver Potion → Order → Bill.','bad');return}
+  el.dataset.locked=1;el.classList.add('delivered');$('target').appendChild(el);
+  if(needed==='potion')msg('Potion delivered ✓ Now hand Emily her order.','good');
+  if(needed==='order')msg('Order delivered ✓ Now hand Emily the bill.','good');
+  if(needed==='bill'){msg('Everything delivered ✓ Emily pays.','good');$('advance').disabled=false}
+  return
+ }
+ if(phase===4&&el.dataset.pay&&hit(el,$('tray'))){
+  el.dataset.locked=1;el.style.position='relative';el.style.left='auto';el.style.top='auto';el.style.margin='4px';$('tray').appendChild(el);
+  sorted++;total+=Number(el.dataset.value);$('sortCount').textContent=`${sorted} / 4`;$('sortGold').textContent=total+'g';
+  if(sorted===4){money+=total;$('money').textContent=money;$('finish').disabled=false;msg('All payment sorted ✓ 25g added to your purse.','good')}else msg(`${4-sorted} payment pieces left.`,'good')
+ }
+}
+function reset(){phase=0;time=435;money=40;selected=null;sorted=0;total=0;$('money').textContent=money;clock();$('modal').classList.remove('hidden');renderOrder()}
+$('start').onclick=()=>{$('modal').classList.add('hidden');renderOrder();clock()};
+document.addEventListener('click',e=>{if(e.target.id==='advance'&&phase===3)renderPayment();if(e.target.id==='finish'&&phase===4&&sorted===4)renderComplete()});
+renderOrder();clock();
+})();
+</script>
+</body>
+</html>
